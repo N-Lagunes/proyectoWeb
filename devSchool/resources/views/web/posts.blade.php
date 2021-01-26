@@ -13,7 +13,7 @@
 
                 <div class="panel-body">
                     @if($post->file)
-                        <img src="{{ $post->file }}" class="img-responsive">
+                        <img src="{{ $post->file }}" class="img-responsive" width="1000px" height="100px">
                     @endif
                     
                     {{ $post->excerpt }}

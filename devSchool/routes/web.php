@@ -16,7 +16,7 @@ Route::redirect('/', 'blog');
 Auth::routes();
 
 Route::get('blog', 'Web\PageController@blog')->name('blog');
-
+//Ruta::toma('parametro/{Valor del parametro}', 'Carpeta\NombreDelControlador@método')
 Route::get('entrada/{slug}',    'Web\PageController@post')->name('post');
 Route::get('categoria/{slug}',  'Web\PageController@category')->name('category');
 Route::get('etiqueta/{slug}',   'Web\PageController@tag')->name('tag');

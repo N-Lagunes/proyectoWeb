@@ -31,6 +31,7 @@ class PostUpdateRequest extends FormRequest
             'tags'          => 'required|array',
             'body'          => 'required',
             'status'        => 'required|in:DRAFT,PUBLISHED',
+            //'file'         => 'mimes:jpg,jpeg,png'
         ];
 
         if($this->get('file'))        

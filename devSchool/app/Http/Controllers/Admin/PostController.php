@@ -20,6 +20,10 @@ class PostController extends Controller
      *
      * @return void
      */
+    /*
+        Constructor que nos permite ocupar el middleware 
+        (capturador de mitad de camino)
+    */
     public function __construct()
     {
         $this->middleware('auth');
@@ -30,12 +34,20 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    
+    /*
+        La función index nos lleva a obtenr los posts ordenados de manera 
+        descendente gracias al id, sí y sólo sí el user ID esta autorizado, 
+        lo cual nos permite paginar y mantener la seguridad entre los autores
+        compact() toma un número variable de parámetros. Cada parámetro puede ser una 
+        cadena que contiene el nombre de la variable, o un array de nombres de variables. El array puede contener otros arrays de nombres de variables dentro de él; compact() los trata recursivamente.
+    */
     public function index()
     {
         $posts = Post::orderBy('id', 'DESC')
             ->where('user_id', auth()->user()->id)
             ->paginate();
-
+        //view().../resources/views/admin/posts/index
         return view('admin.posts.index', compact('posts'));
     }
 
@@ -44,6 +56,11 @@ class PostController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    /*
+        En la función "crear" nos permite gracias a las categorias ordenadas
+        de manera ascendente y los tags ordenamos de manera ascendente 
+        acceder a la vista create
+    */
     public function create()
     {
         $categories = Category::orderBy('name', 'ASC')->pluck('name', 'id');
@@ -58,6 +75,20 @@ class PostController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
+    /*
+        En la función de almacenamiento ocupamos un método creado con 
+        PostStoreRequest creado gracias a make:request 'name'
+        entonces conseguimo ocupamos el método crear en dónde requermimos todo
+        ¿qué es todo? = protected $fillable =[
+        'user_id','category_id','name','slug','excerpt','body','status','file'];
+        
+        Tenemos un método para la imagen donde espécificamos sí exíste una imagen
+        entonces ocupando Storage los guaramos en public/image/item
+        luego lo llenamos y guardamos, recordando que el método asset()
+        $url = asset('img/photo.jpg'); // http://example.com/assets/img/photo.jpg
+
+        en la parte del tag ocupamos em método attach() donde une el tag al post
+    */
     public function store(PostStoreRequest $request)
     {
         $post = Post::create($request->all());
@@ -66,7 +97,7 @@ class PostController extends Controller
             $path = Storage::disk('public')->put('image',  $request->file('file'));
             $post->fill(['file' => asset($path)])->save();
         }
-
+        //dd($request->all());
          //TAGS
          $post->tags()->attach($request->get('tags'));
 
@@ -79,6 +110,10 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    /* 
+        la función "mostrar" búsca el post y lo pone en la vista post    
+    */
     public function show($id)
     {
         $post = Post::find($id);
@@ -92,6 +127,8 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+
+    /* */
     public function edit($id)
     {
         $post       = Post::find($id);
@@ -110,13 +147,16 @@ class PostController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
+    /*
+        
+    */
     public function update(PostUpdateRequest $request, $id)
     {
         $post = Post::find($id);
         $this -> authorize('pass', $post);
         $post->fill($request->all())->save();
 
-        //IMAGE
+        //IMAGE Storage::disk('public')....Public/image/file
         if($request->file('file')){
             $path = Storage::disk('public')->put('image',  $request->file('file'));
             $post->fill(['file' => asset($path)])->save();
