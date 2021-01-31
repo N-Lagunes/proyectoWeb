@@ -31,6 +31,7 @@ class CreatePostsTable extends Migration
             $table->timestamps();
             
             //relation
+            //tabla->claveForanea('nombreClave')->columna('nc')->tabla('nT')
             $table->foreign('user_id')->references('id')->on('users')
                 ->onDelete('cascade')
                 ->onUpdate('cascade');

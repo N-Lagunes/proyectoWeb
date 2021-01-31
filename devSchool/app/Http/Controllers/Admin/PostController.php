@@ -92,6 +92,7 @@ class PostController extends Controller
     public function store(PostStoreRequest $request)
     {
         $post = Post::create($request->all());
+        /*all()...request[ele1 ele2 ele3 category_id tag_id,file....] */
         //IMAGE
         if($request->file('file')){
             $path = Storage::disk('public')->put('image',  $request->file('file'));

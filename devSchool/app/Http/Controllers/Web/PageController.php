@@ -10,7 +10,10 @@ use App\Category;
 use App\Tag;
 
 class PageController extends Controller
-{   /*
+{   /*    
+     Acción <-middleware <-respuesta  <-BD
+    MVC -> request ->middleware -> controller ->BD 
+
         Obtengo de los posts de Post y de ordenan de manera descendente por su ID
         se paginan en 3 y regresan a la vista /views/web/posts.
         ocupando el método compact('variable') 
@@ -18,6 +21,8 @@ class PageController extends Controller
     public function blog(){
         $posts = Post::orderBy('id','DESC')->where('status','PUBLISHED')->paginate(3);
         return view('web.posts',compact('posts'));
+        //vistas(/resources/view/...web/posts)
+        //controlador.método
     }
     
     /* 
